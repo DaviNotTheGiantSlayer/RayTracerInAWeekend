@@ -15,6 +15,16 @@ write_color :: proc(color : [3]f64) {
 }
 
 main :: proc() {
+    aspect_ratio : f32;
+    image_width : int;
+    image_height : int;
+
+
+    aspect_ratio = 16.0 / 9.0;
+    image_width = 400;
+    image_height = int(image_width / int(aspect_ratio));
+
+
     imageWidth := 256;
     imageHeight := 256;
 
@@ -24,10 +34,8 @@ main :: proc() {
         fmt.eprintf("\rScanlines remaining: %d \n", (imageHeight - j))
         for i := 0; i < imageHeight; i += 1 {
             color : [3]f64
-            color[0] = f64(i) / f64(imageWidth - 1)
-            color[1] = f64(j) / f64(imageHeight - 1)
-            color[2] = 0.0
-
+            color = {f64(i) / f64(imageWidth - 1), f64(j) / f64(imageHeight - 1), 0.0}
+            
             write_color(color)
         }    
     }
