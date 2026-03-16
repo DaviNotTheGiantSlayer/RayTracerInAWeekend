@@ -31,7 +31,13 @@ normalize3d :: proc(v : Vec3) -> Vec3 {
     length := length3d(v);
     return {v.x / length, v.y / length, v.z / length};
 }
+sub :: proc(u: Vec3, v : Vec3) -> Vec3 {
+    return {u.x - v.x, u.y - v.y, u.z - v.z}
+}
 mul :: proc(v : Vec3, t : f32) -> Vec3 {
     return {v.x * t, v.y * t, v.z * t}
+}
+div :: proc(v : Vec3, t : f32) -> Vec3 {
+    return {v.x / t, v.y / t, v.z / t}
 }
 
