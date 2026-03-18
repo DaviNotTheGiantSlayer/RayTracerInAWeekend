@@ -1,6 +1,7 @@
 package raytracerinaweekend
 
 import "core:fmt"
+import "core:math"
 
 write_color :: proc(color : Vec3) {
     r := color.x
@@ -14,17 +15,7 @@ write_color :: proc(color : Vec3) {
     fmt.printf("%d %d %d\n", ir, ig, ib)
 }
 
-ray_color :: proc(r : Ray) -> Vec3{
-    if hit_sphere(Vec3{0, 0, -1}, 0.5, r) {
-        return Vec3{1, 0, 0};
-    }
-
-    unit_direction := normalize3d(r.direction);
-    a := (unit_direction.y + 1)*0.5;
-    return add3d(mul(Vec3{1.0, 1.0, 1.0}, 1.0-a), mul(Vec3{0.5, 0.7, 1.0}, a));
-}
-
-hit_sphere :: proc(center : Vec3, radius : f32, r : Ray) -> bool {
+hit_sphere :: proc(center : Vec3, radius : f32, r : Ray) -> f32 {
     oc := sub(center, r.origin);
     
     a := dot3d(r.direction, r.direction);
@@ -34,8 +25,24 @@ hit_sphere :: proc(center : Vec3, radius : f32, r : Ray) -> bool {
     c := dot3d(oc, oc) - radius*radius;
     
     discriminant := b*b -4*a*c;
-    
-    return discriminant > 0;
+
+    if discriminant < 0 {
+        return -1.0;
+    } else {
+        return -b - math.sqrt(discriminant) / (2*a);
+    }
+}
+
+ray_color :: proc(r : Ray) -> Vec3 {
+    t := hit_sphere(Vec3{0, 0, -1}, 0.5, r);
+    if t > 0 {
+        N := normalize3d(sub(at(r, t), Vec3{0, 0, -1}));
+        return mul(Vec3{N.x+1, N.y+1, N.z+1}, 0.5);
+    }
+
+    unit_direction := normalize3d(r.direction);
+    a := (unit_direction.y + 1)*0.5;
+    return add3d(mul(Vec3{1.0, 1.0, 1.0}, 1.0-a), mul(Vec3{0.5, 0.7, 1.0}, a));
 }
 
 main :: proc() {
@@ -67,7 +74,7 @@ main :: proc() {
     camera_center = Vec3 {0, 0, 0}
 
     viewport_u = Vec3 {viewport_width, 0, 0}
-    viewport_u = Vec3 {0, viewport_height*-1, 0}
+    viewport_v = Vec3 {0, viewport_height*-1, 0}
 
     pixel_delta_u = div(viewport_u, f32(image_width)); 
     pixel_delta_v = div(viewport_v, f32(image_height));

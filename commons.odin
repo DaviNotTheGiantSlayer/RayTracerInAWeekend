@@ -15,7 +15,7 @@ dot2d :: proc(v1 : Vec2, v2 : Vec2) -> f32 {
     return v1.x * v2.x + v1.y * v2.y;
 }
 dot3d :: proc(v1 : Vec3, v2 : Vec3) -> f32 {
-    return v1.x * v2.x + v1.y * v2.y + v1.z + v2.z;
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 length2d :: proc(v : Vec2) -> f32 {
     return math.sqrt(v.x * v.x + v.y * v.y);
