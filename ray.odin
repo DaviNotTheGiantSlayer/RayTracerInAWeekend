@@ -1,10 +1,10 @@
 package raytracerinaweekend
 
 Ray :: struct {
-    origin : Vec3,
-    direction : Vec3
+    origin : [3]f32,
+    direction : [3]f32
 }
 
-at :: proc(ray : Ray, t : f32) -> Vec3{
-    return add3d(ray.origin, mul(ray.direction, t));
+at :: proc(ray : Ray, t : f32) -> [3]f32 {
+    return ray.origin + ray.direction * t;
 }
